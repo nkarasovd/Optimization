@@ -15,6 +15,8 @@
  * Пока что сделал трех.
  */
 class Function {
+private:
+    int dim;
 public:
     /*
      * Метод будет возвращать название функции.
@@ -23,9 +25,7 @@ public:
     virtual const char *get_name() = 0;
 
     /*
-     * Метод будет возвращать знакчений в точке,
-     * пока что непонятно, что передавать в качестве
-     * параметра.
+     * Метод будет возвращать значение в точке.
      */
     virtual const double get_value(std::vector<double> &x) = 0;
 
@@ -64,7 +64,7 @@ public:
      */
     const int get_dim() override;
 
-    Matrix* m = new Matrix(dim);
+    Matrix *m = new Matrix(dim);
 
     std::vector<double> calc_x(std::vector<double> x_0);
 };
@@ -103,9 +103,10 @@ class Function_3 : public Function {
 class Matrix {
 private:
     int size;
-    std::vector<std::vector<double>>  matrix;
+    std::vector<std::vector<double>> matrix;
 public:
     Matrix(int _size);
 
 };
+
 #endif //OPTIMIZATION_FUNCTIONS_H
