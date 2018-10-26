@@ -47,11 +47,16 @@ int main() {
     }
 
     Rectangle rectangle(left_bound, right_bound, dim);
-    StopCriterion_3 stop;
+    StopCriterion_1 stop;
     std::vector<double> v;
     std::vector<double> res(dim);
-    RandomSearch randomSearch(p);
-    res = randomSearch.optimization(v, function, rectangle, stop, options);
+//    RandomSearch randomSearch(p);
+//    res = randomSearch.optimization(v, function, rectangle, stop, options);
+    std::vector<double> x(dim);
+    x[0] = -1;
+    x[1] = -1;
+    NewtonByDirection newtonByDirection(x);
+    res = newtonByDirection.optimization(x, function, stop, options);
     std::cout << "minimum point: ";
     for (int i = 0; i < dim; ++i) {
         std::cout << res[i];

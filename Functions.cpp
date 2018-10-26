@@ -21,8 +21,21 @@ const int Function_1::get_dim() {
     return dim;
 }
 
-std::vector<double> Function_1::calc_x(std::vector<double> x_0) {
-    return std::vector<double>();
+Function_1::Function_1() {
+    dim = 2;
+}
+
+const VectorXd Function_1::Gradient(VectorXd &x) {
+    VectorXd gradient(dim);
+    gradient << 2 * (200 * x(0) * x(0) * x(0) - 200 * x(0) * x(1) + x(0) - 1), 200 * (x(1) - x(0) * x(0));
+    return gradient;
+}
+
+const MatrixXd Function_1::Hessian(VectorXd &x) {
+    MatrixXd hessian(dim, dim);
+    hessian << 1200 * x(0) * x(0), -400 * x(0),
+            -400 * x(0), 200;
+    return hessian;
 }
 
 /*====================================================================================================================*/
@@ -43,6 +56,14 @@ const int Function_2::get_dim() {
     return 0;
 }
 
+const VectorXd Function_2::Gradient(VectorXd &x) {
+    return Eigen::VectorXd();
+}
+
+const MatrixXd Function_2::Hessian(VectorXd &x) {
+    return Eigen::MatrixXd();
+}
+
 /*====================================================================================================================*/
 
 /*
@@ -61,7 +82,13 @@ const int Function_3::get_dim() {
     return 0;
 }
 
-/*====================================================================================================================*/
-Matrix::Matrix(int _size) {
-    size = _size;
+const VectorXd Function_3::Gradient(VectorXd &x) {
+    return Eigen::VectorXd();
 }
+
+const MatrixXd Function_3::Hessian(VectorXd &x) {
+    return Eigen::MatrixXd();
+}
+
+/*====================================================================================================================*/
+

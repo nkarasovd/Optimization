@@ -31,9 +31,9 @@ public:
      * будет своя реализация. Возвращает точку, в которой
      * достигается минимум функции function.
      */
-    virtual std::vector<double>
-    optimization(std::vector<double> &point, Function &function, Rectangle &rectangle, Stop &stop,
-                 Options &options) = 0;
+//    virtual std::vector<double>
+//    optimization(std::vector<double> &point, Function &function, Rectangle &rectangle, Stop &stop,
+//                 Options &options) = 0;
 };
 
 /*====================================================================================================================*/
@@ -65,7 +65,7 @@ public:
 
     std::vector<double>
     optimization(std::vector<double> &point, Function &function, Rectangle &rectangle, Stop &stop,
-                 Options &options) override;
+                 Options &options);
 
 };
 
@@ -82,8 +82,10 @@ public:
     NewtonByDirection(const std::vector<double> &_x_0);
 
     std::vector<double>
-    optimization(std::vector<double> &point, Function &function, Rectangle &rectangle, Stop &stop,
-                 Options &options) override;
+    optimization(std::vector<double> &point, Function &function, Stop &stop,
+                 Options &options);
+
+    const char *get_name() override;
 };
 
 /*====================================================================================================================*/

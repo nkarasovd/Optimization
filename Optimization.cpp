@@ -97,11 +97,23 @@ NewtonByDirection::NewtonByDirection(const std::vector<double> &_x_0) {
 }
 
 std::vector<double>
-NewtonByDirection::optimization(std::vector<double> &point, Function &function, Rectangle &rectangle, Stop &stop,
+NewtonByDirection::optimization(std::vector<double> &point, Function &function, Stop &stop,
                                 Options &options) {
-
-    while (stop.criterion(count_iter, function, y_0, y_n, options)) {
-
+    int dim = function.get_dim();
+    VectorXd v(dim);
+    for (int i = 0; i < dim; ++i) {
+        v(i) = point[i];
     }
-    return std::vector<double>();
+    while (stop.criterion(count_iter, function, point, point, options)) {
+        ++this->count_iter;
+        v = v - function.Hessian(v).colPivHouseholderQr().solve(function.Gradient(v));
+    }
+    for (int i = 0; i < dim; ++i) {
+        point[i] = v(i);
+    }
+    return point;
+}
+
+const char *NewtonByDirection::get_name() {
+    return nullptr;
 }
