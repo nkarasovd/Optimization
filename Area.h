@@ -8,39 +8,65 @@
 #include <vector>
 
 /*====================================================================================================================*/
-
+/**
+ * Класс Area:
+ * абстрактный класс,
+ * имеет наслденика Rectangle -
+ * прямоугольная область.
+ */
 class Area {
 protected:
-    int dim = 0;
+    int dim; // Размерность пространства
 public:
     virtual const int get_dim() = 0;
 };
 
 /*====================================================================================================================*/
-
+/**
+ * Класс Rectangle:
+ * наследник Area,
+ * задает прямоугольную область
+ * в пространстве R^{dim}.
+ */
 class Rectangle : public Area {
 protected:
-    std::vector<double> left_border;
-    std::vector<double> right_border;
+    std::vector<double> left_border; // Левая граница области
+    std::vector<double> right_border; // Правая граница области
 public:
     const int get_dim() override;
 
+    /*
+     * Возвращает i-ую координату левой границы
+     */
     const double get_left(int i);
 
+    /*
+     * Возвращает i-ую координату правой границы
+     */
     const double get_right(int i);
 
     Rectangle() = default;
 
-    Rectangle(std::vector<double> &l, std::vector<double> &r, int d);
+    /*
+     * Конструктор для задания начальной
+     * прямоугольной области. Для этого нужны
+     * обе границы и размерность пространства.
+     */
+    Rectangle(std::vector<double> &l, std::vector<double> &r, int _dim);
 
     ~Rectangle();
 
+    /*
+     * Конструктор для задания сжатой области.
+     * Пересекаем имеющийся прямоугольник с
+     * шаром в точке улучшения с радиусом delta.
+     */
     Rectangle(std::vector<double> &l, std::vector<double> &r, std::vector<double> &y_n,
               int d, double delta);
 
-    std::vector<double> & get_left();
+    std::vector<double> &get_left();
 
-    std::vector<double> & get_right();
+    std::vector<double> &get_right();
 };
 
 /*====================================================================================================================*/

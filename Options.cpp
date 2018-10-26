@@ -10,13 +10,14 @@ Options::Options(double _delta, int _iteration, double _epsilon) {
     if (_iteration < 1) {
         throw std::invalid_argument("Error! iterations > 0");
     }
-    count_iter = _iteration;
+    index = 0;
+    max_iter = _iteration;
     delta = _delta;
     epsilon = _epsilon;
 }
 
-int Options::get_iter() const {
-    return count_iter;
+int Options::get_max_iter() const {
+    return max_iter;
 }
 
 double Options::get_delta() const {
@@ -35,12 +36,12 @@ void Options::set_last_iter(int _iter) {
     last_iter = _iter;
 }
 
-void Options::set_x_k(std::vector<double> _v) {
+void Options::set_x_k(std::vector<double> &_v) {
     if (index == 0) {
         x_k = _v;
 
     } else {
-        x_kj = _v;
+        x_k_Plus_j = _v;
     }
     ++index;
     index %= 2;
@@ -50,8 +51,8 @@ std::vector<double> &Options::get_x_k() {
     return x_k;
 }
 
-std::vector<double> &Options::get_x_kj() {
-    return x_kj;
+std::vector<double> &Options::get_x_k_Plus_j() {
+    return x_k_Plus_j;
 }
 
 /*====================================================================================================================*/

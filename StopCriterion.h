@@ -10,71 +10,70 @@
 
 /*====================================================================================================================*/
 
-/*
+/**
  * Абстрактный класс критерия остановки.
- * Пока не знаю что тут вообще будет
- * и сколько критериев будет. Для начала
- * сделаем хотя бы один.
+ * Имеет наследников.
  */
-
 class Stop {
 public:
     /*
-     * Функция возвращать будет либо
-     * TRUE либо FALSE. Типо пора остановаиться,
-     * али нет.
+     * Функция возвращает либо True, либо False.
+     * True == продолжаем поиск.
+     * False == останавливаемся.
      */
     virtual bool
-    criterion(int count_iter, Function &function, std::vector<double> &x1, std::vector<double> &x2,
-              Options &options) = 0;
+    criterion(int count_iter, Function &function, Options &options) = 0;
 
     /*
-     * Функция вернет имя критерия остановки,
-     * конкретного критерия. Какие они будут,
-     * пока что никто не знает.
+     * Функция вернет имя критерия остановки.
      */
     virtual const char *get_name() = 0;
 };
 
 /*====================================================================================================================*/
 
-/*
- * Первый критерий состоит в том,
- * что остановка происходит по причине достижения
+/**
+ * Критерий номер 1.
+ * Остановка происходит при достижении
  * максимального числа итераций.
- * Как только count_iter == options.get_iter(),
+ * Как только count_iter == options.get_max_iter(),
  * то сразу заканчиваем поиск.
  */
-
 class StopCriterion_1 : public Stop {
-    bool criterion(int count_iter, Function &function, std::vector<double> &x1, std::vector<double> &x2,
-                   Options &options) override;
+    bool criterion(int count_iter, Function &function, Options &options) override;
 
     const char *get_name() override;
 };
 
 /*====================================================================================================================*/
 
-/*
- * Число прошедших итераций с последнего улучшения.
+/**
+ * Критерий номер 2.
+ * Остановка происходит при достижении
+ * числа прошедших итераций с последнего улучшения
+ * максимального числа итераций.
+ * Как только options.get_last_iter() == options.get_max_iter(),
+ * то сразу заканчиваем поиск.
  */
-
 class StopCriterion_2 : public Stop {
-    bool criterion(int count_iter, Function &function, std::vector<double> &x1, std::vector<double> &x2,
-                   Options &options) override;
+    bool criterion(int count_iter, Function &function, Options &options) override;
 
     const char *get_name() override;
 };
 
 /*====================================================================================================================*/
 
-/*
- * Разность значений функции в двух соседних точках
+/**
+ * Критерий номер 3.
+ * Остановка происходит, когда
+ * разность значений функции в двух соседних точках
  * улучшения меньше epsilon.
+ * |f(x_{k+j}) - f(x_{k})| < epsilon
+ * Как только |f(options.get_x_k_Plus_j()) - f(options.get_x_kj())| < epsilon,
+ * то сразу заканчиваем поиск.
  */
 class StopCriterion_3 : public Stop {
-    bool criterion(int count_iter, Function &function, std::vector<double> &x1, std::vector<double> &x2,
-                   Options &options) override;
+    bool criterion(int count_iter, Function &function, Options &options) override;
 
     const char *get_name() override;
 };

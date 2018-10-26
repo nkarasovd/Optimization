@@ -2,7 +2,6 @@
 // Created by Николай Карасов on 02/10/2018.
 //
 #include "StopCriterion.h"
-#include <cmath>
 
 /*====================================================================================================================*/
 
@@ -10,9 +9,8 @@
  * Все ниже для первого критерия.
  */
 
-bool StopCriterion_1::criterion(int count_iter, Function &function, std::vector<double> &x1, std::vector<double> &x2,
-                                Options &options) {
-    return count_iter != options.get_iter();
+bool StopCriterion_1::criterion(int count_iter, Function &function, Options &options) {
+    return count_iter != options.get_max_iter();
 }
 
 const char *StopCriterion_1::get_name() {
@@ -21,9 +19,8 @@ const char *StopCriterion_1::get_name() {
 
 /*====================================================================================================================*/
 
-bool StopCriterion_2::criterion(int count_iter, Function &function, std::vector<double> &x1, std::vector<double> &x2,
-                                Options &options) {
-    return options.get_last_iter() < options.get_iter();
+bool StopCriterion_2::criterion(int count_iter, Function &function, Options &options) {
+    return options.get_last_iter() < options.get_max_iter();
 }
 
 const char *StopCriterion_2::get_name() {
@@ -32,11 +29,10 @@ const char *StopCriterion_2::get_name() {
 
 /*====================================================================================================================*/
 
-bool StopCriterion_3::criterion(int count_iter, Function &function, std::vector<double> &x1, std::vector<double> &x2,
-                                Options &options) {
-    if (options.get_x_k().empty() || options.get_x_kj().empty()) return true;
+bool StopCriterion_3::criterion(int count_iter, Function &function, Options &options) {
+    if (options.get_x_k().empty() || options.get_x_k_Plus_j().empty()) return true;
 
-    double value = fabs(function.get_value(options.get_x_kj()) - function.get_value(options.get_x_k()));
+    double value = fabs(function.get_value(options.get_x_k_Plus_j()) - function.get_value(options.get_x_k()));
 
     return value > options.get_epsilon();
 

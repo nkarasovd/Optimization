@@ -5,30 +5,12 @@
 
 /*====================================================================================================================*/
 
-const int Rectangle::get_dim() {
-    return dim;
-}
-
 Rectangle::~Rectangle() {
     dim = 0;
 }
 
-const double Rectangle::get_left(int i) {
-    if (i < 0 || i > dim - 1) {
-        throw std::invalid_argument("Error! 0 <= i <= " + (dim - 1));
-    }
-    return left_border[i];
-}
-
-const double Rectangle::get_right(int i) {
-    if (i < 0 || i > dim - 1) {
-        throw std::invalid_argument("Error! 0 <= i <= " + (dim - 1));
-    }
-    return right_border[i];
-}
-
-Rectangle::Rectangle(std::vector<double> &l, std::vector<double> &r, int d) {
-    dim = d;
+Rectangle::Rectangle(std::vector<double> &l, std::vector<double> &r, int _dim) {
+    dim = _dim;
     left_border = l;
     right_border = r;
 }
@@ -48,6 +30,18 @@ Rectangle::Rectangle(std::vector<double> &l, std::vector<double> &r, std::vector
             right_border.push_back(y_n[i] + delta);
         }
     }
+}
+
+const int Rectangle::get_dim() {
+    return dim;
+}
+
+const double Rectangle::get_left(int i) {
+    return left_border[i];
+}
+
+const double Rectangle::get_right(int i) {
+    return right_border[i];
 }
 
 std::vector<double> &Rectangle::get_left() {

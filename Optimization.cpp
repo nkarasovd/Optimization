@@ -3,6 +3,7 @@
 //
 #include <stdexcept>
 #include <vector>
+#include <iostream>
 #include "Optimization.h"
 
 /*====================================================================================================================*/
@@ -12,7 +13,7 @@
  */
 
 const char *RandomSearch::get_name() {
-    return "Random Search";
+    return "Random Search --- number 1";
 }
 
 RandomSearch::RandomSearch(double p) {
@@ -44,28 +45,39 @@ RandomSearch::optimization(std::vector<double> &point, Function &function, Recta
 
     std::vector<double> curr_pos(dim);
 
+    int last_iter = 0;
+    options.set_last_iter(last_iter);
+
     double delta = options.get_delta();
 
-    while (stop.criterion(count_iter, function, y_0, y_n, options)) {
+    while (stop.criterion(count_iter, function, options)) {
         ++this->count_iter;
         double q = _dist(_generate);
 
         if (q < p) {
             curr_pos = rand_vector(rectangle);
             if (function.get_value(curr_pos) < function.get_value(y_n)) {
+                last_iter = 0;
+                options.set_last_iter(last_iter);
                 options.set_x_k(curr_pos);
-                options.set_last_iter(count_iter);
                 y_n = curr_pos;
 
+            } else {
+                ++last_iter;
+                options.set_last_iter(last_iter);
             }
         } else {
             Rectangle new_rectangle(rectangle.get_left(), rectangle.get_right(), y_n, dim, delta);
             curr_pos = rand_vector(new_rectangle);
             if (function.get_value(curr_pos) < function.get_value(y_n)) {
+                last_iter = 0;
+                options.set_last_iter(last_iter);
                 options.set_x_k(curr_pos);
-                options.set_last_iter(count_iter);
                 y_n = curr_pos;
                 delta *= 0.7;
+            } else {
+                ++last_iter;
+                options.set_last_iter(last_iter);
             }
 
         }
@@ -84,10 +96,6 @@ std::vector<double> RandomSearch::rand_vector(Rectangle &rectangle) {
 }
 
 void RandomSearch::set_p(double prob) {
-
-    if (prob < 0 || prob > 1) {
-        throw std::invalid_argument("Error! 0 <= p <= 1");
-    }
     p = prob;
 }
 
@@ -100,20 +108,44 @@ std::vector<double>
 NewtonByDirection::optimization(std::vector<double> &point, Function &function, Stop &stop,
                                 Options &options) {
     int dim = function.get_dim();
-    VectorXd v(dim);
+    int last_iter = 0;
+    options.set_last_iter(last_iter);
+
+    VectorXd last_v(dim);
+    VectorXd cur_v(dim);
+
+    std::vector<double> p_cur(dim);
     for (int i = 0; i < dim; ++i) {
-        v(i) = point[i];
+        last_v(i) = point[i];
     }
-    while (stop.criterion(count_iter, function, point, point, options)) {
+
+    while (stop.criterion(count_iter, function, options)) {
         ++this->count_iter;
-        v = v - function.Hessian(v).colPivHouseholderQr().solve(function.Gradient(v));
+        cur_v = last_v - function.Hessian(last_v).colPivHouseholderQr().solve(function.Gradient(last_v));
+
+        for (int i = 0; i < dim; ++i) {
+            point[i] = last_v(i);
+        }
+        for (int i = 0; i < dim; ++i) {
+            p_cur[i] = cur_v(i);
+        }
+        if (function.get_value(p_cur) < function.get_value(point)) {
+            std::cout << "aaa" << std::endl;
+            options.set_x_k(p_cur);
+            last_iter = 0;
+            options.set_last_iter(last_iter);
+        } else {
+            ++last_iter;
+            options.set_last_iter(last_iter);
+        }
+        last_v = cur_v;
     }
     for (int i = 0; i < dim; ++i) {
-        point[i] = v(i);
+        point[i] = last_v(i);
     }
     return point;
 }
 
 const char *NewtonByDirection::get_name() {
-    return nullptr;
+    return "Newton by direction --- number 2";
 }
