@@ -29,34 +29,46 @@ int main() {
 
     Function_1 function;
     int dim = function.get_dim();
-
-    double point;
-
-    std::vector<double> left_bound, right_bound;
-    std::cout << "left bound:" << std::endl;
-    for (int i = 0; i < dim; ++i) {
-        std::cin >> point;
-        left_bound.push_back(point);
-    }
-
-
-    std::cout << "right bound:" << std::endl;
-    for (int i = 0; i < dim; ++i) {
-        std::cin >> point;
-        right_bound.push_back(point);
-    }
-
-    Rectangle rectangle(left_bound, right_bound, dim);
-    StopCriterion_1 stop;
-    std::vector<double> v;
     std::vector<double> res(dim);
-//    RandomSearch randomSearch(p);
-//    res = randomSearch.optimization(v, function, rectangle, stop, options);
-    std::vector<double> x(dim);
-    x[0] = -1;
-    x[1] = -1;
-    NewtonByDirection newtonByDirection(x);
-    res = newtonByDirection.optimization(x, function, stop, options);
+    std::cout << "Выберите метод оптимизации" << std::endl;
+    StopCriterion_3 stop;
+    int method;
+    std::cin >> method;
+
+
+    if (method == 1) {
+        double point;
+
+        std::vector<double> left_bound, right_bound;
+        std::cout << "left bound:" << std::endl;
+        for (int i = 0; i < dim; ++i) {
+            std::cin >> point;
+            left_bound.push_back(point);
+        }
+
+
+        std::cout << "right bound:" << std::endl;
+        for (int i = 0; i < dim; ++i) {
+            std::cin >> point;
+            right_bound.push_back(point);
+        }
+
+        Rectangle rectangle(left_bound, right_bound, dim);
+
+        std::vector<double> v;
+        RandomSearch randomSearch(p);
+//        res = randomSearch.optimization(v, function, rectangle, stop, options);
+    } else {
+        std::vector<double> x(dim);
+        double t;
+        std::cout << "point start" << std::endl;
+        for (int i = 0; i < dim; ++i) {
+            std::cin >> t;
+            x[i] = t;
+        }
+        NewtonByDirection newtonByDirection(x);
+        res = newtonByDirection.optimization(x, function, stop, options);
+    }
     std::cout << "minimum point: ";
     for (int i = 0; i < dim; ++i) {
         std::cout << res[i];
