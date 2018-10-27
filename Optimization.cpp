@@ -12,12 +12,7 @@
  * Functions of RandomSearch class.
  */
 
-const char *RandomSearch::get_name() {
-    return "Random Search --- number 1";
-}
-
-RandomSearch::RandomSearch(double p) {
-    this->set_p(p);
+Optimization::Optimization() {
     std::random_device rd;
     std::mt19937 mt(rd());
     _generate = mt;
@@ -25,17 +20,10 @@ RandomSearch::RandomSearch(double p) {
     _dist = d;
 }
 
-RandomSearch::~RandomSearch() {
-    p = 0;
-}
-
-const double RandomSearch::get_p() {
-    return p;
-}
 
 std::vector<double>
-RandomSearch::optimization(Function &function, Rectangle &rectangle, Stop &stop, Options &options) {
-    int dim = function.get_dim();
+Optimization::optimizationRa(Function *function, Rectangle &rectangle, Stop &stop, Options &options, double p) {
+    int dim = function->get_dim();
 
     std::vector<double> y_0(dim);
     y_0 = rand_vector(rectangle);
@@ -59,7 +47,7 @@ RandomSearch::optimization(Function &function, Rectangle &rectangle, Stop &stop,
         } else {
             curr_pos = rand_vector(rectangle);
         }
-        if (function.get_value(curr_pos) < function.get_value(y_n)) {
+        if (function->get_value(curr_pos) < function->get_value(y_n)) {
             last_iter = 0;
             options.set_last_iter(last_iter);
             options.set_x_k(curr_pos);
@@ -76,7 +64,7 @@ RandomSearch::optimization(Function &function, Rectangle &rectangle, Stop &stop,
 }
 
 
-std::vector<double> RandomSearch::rand_vector(Rectangle &rectangle) {
+std::vector<double> Optimization::rand_vector(Rectangle &rectangle) {
     int dim = rectangle.get_dim();
     std::vector<double> point(dim);
     for (int i = 0; i < dim; ++i) {
@@ -85,18 +73,12 @@ std::vector<double> RandomSearch::rand_vector(Rectangle &rectangle) {
     return point;
 }
 
-void RandomSearch::set_p(double prob) {
-    p = prob;
-}
 
 /*====================================================================================================================*/
-NewtonByDirection::NewtonByDirection(const std::vector<double> &_x_0) {
-    this->x_0 = _x_0;
-}
 
 std::vector<double>
-NewtonByDirection::optimization(std::vector<double> &point, Function &function, Stop &stop, Options &options) {
-    int dim = function.get_dim();
+Optimization::optimizationNe(std::vector<double> &point, Function *function, Stop &stop, Options &options) {
+    int dim = function->get_dim();
     int last_iter = 0;
     options.set_last_iter(last_iter);
 
@@ -109,20 +91,19 @@ NewtonByDirection::optimization(std::vector<double> &point, Function &function, 
 
     while (stop.criterion(count_iter, function, options)) {
         ++this->count_iter;
-        cur_v = last_v - function.Hessian(last_v).colPivHouseholderQr().solve(function.Gradient(last_v));
+        cur_v = last_v - function->Hessian(last_v).colPivHouseholderQr().solve(function->Gradient(last_v));
 
         point = copy(point, last_v);
 
 
         p_cur = copy(p_cur, cur_v);
 
-        if (function.get_value(p_cur) < function.get_value(point)) {
+        if (function->get_value(p_cur) < function->get_value(point)) {
 
             options.set_x_k(p_cur);
             last_iter = 0;
             options.set_last_iter(last_iter);
         } else {
-            std::cout << " asasasas" << std::endl;
             ++last_iter;
             options.set_last_iter(last_iter);
         }
@@ -133,11 +114,7 @@ NewtonByDirection::optimization(std::vector<double> &point, Function &function, 
     return point;
 }
 
-const char *NewtonByDirection::get_name() {
-    return "Newton by direction --- number 2";
-}
-
-std::vector<double> NewtonByDirection::copy(std::vector<double> &v, VectorXd &x) {
+std::vector<double> Optimization::copy(std::vector<double> &v, VectorXd &x) {
 
     for (int i = 0; i < x.size(); ++i) {
         v[i] = x(i);
@@ -145,7 +122,7 @@ std::vector<double> NewtonByDirection::copy(std::vector<double> &v, VectorXd &x)
     return v;
 }
 
-VectorXd NewtonByDirection::copy(VectorXd &x, std::vector<double> &v) {
+VectorXd Optimization::copy(VectorXd &x, std::vector<double> &v) {
     for (int i = 0; i < x.size(); ++i) {
         x(i) = v[i];
     }

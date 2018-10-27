@@ -29,10 +29,16 @@ public:
  * в пространстве R^{dim}.
  */
 class Rectangle : public Area {
-protected:
+private:
+    double delta; // Радиус шара с центром в точке улучшения
+
     std::vector<double> left_border; // Левая граница области
     std::vector<double> right_border; // Правая граница области
 public:
+    double get_delta() const;
+
+    void set_delta(double delta);
+
     const int get_dim() override;
 
     /*

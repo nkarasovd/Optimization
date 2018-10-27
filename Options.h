@@ -15,7 +15,6 @@
  * и сразу, а просто передать коробку со всем добром.
  */
 class Options {
-    double delta; // Радиус шара с центром в точке улучшения
     int max_iter; // Максимальное число итераций
 
     /*
@@ -29,9 +28,7 @@ class Options {
     std::vector<double> x_k_Plus_j; // Точка улучшения x_{k+j}
     double epsilon; // |f(x_{k+j}) - f(x_{k})| < epsilon
 public:
-    Options(double _delta, int _iteration, double _epsilon);
-
-    double get_delta() const;
+    Options(int _iteration, double _epsilon);
 
     int get_max_iter() const;
 

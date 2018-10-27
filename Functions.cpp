@@ -10,7 +10,7 @@
  */
 
 const char *Function_1::get_name() {
-    return "f(x_{1}, x_{2}) = (1 - x_{1})^{2} + 100 * (x_{2} - x_{1}^{2})^{2}";
+    return "f(x, y) = (1 - x)^2 + 100 * (y - x^2)^2";
 }
 
 const double Function_1::get_value(std::vector<double> &x) {

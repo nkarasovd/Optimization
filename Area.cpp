@@ -52,4 +52,12 @@ std::vector<double> &Rectangle::get_right() {
     return right_border;
 }
 
+double Rectangle::get_delta() const {
+    return delta;
+}
+
+void Rectangle::set_delta(double delta) {
+    Rectangle::delta = delta;
+}
+
 /*====================================================================================================================*/

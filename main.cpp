@@ -1,42 +1,104 @@
-#include <iostream>
 #include "Options.h"
 #include "Functions.h"
 #include "Area.h"
 #include "Optimization.h"
-
+#include <string>
+#include <iostream>
+#include <cmath>
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
-    int count_iter = 0;
-    std::cout << "maximum number of iterations: " << std::endl;
-    std::cin >> count_iter;
+/*====================================================================================================================*/
 
-    double delta = 0;
-    std::cout << "delta: " << std::endl;
-    std::cin >> delta;
-    std::cout << std::endl;
+    std::cout << "\n************************* Optimization Program *************************\n" << std::endl;
+
+    std::cout << "\nChoose your function:\n"
+              << "< 1 > (1 - x)^2 + 100 * (y - x^2)^2\n"
+              << "< 2 > \n"
+              << "< 3 > \n" << std::endl;
+
+    int number;
+    double number_d = 0;
+    while (!(number_d == 1 || number_d == 2 || number_d == 3)) {
+        std::cout << "Please , enter a number (1, 2, 3)\n";
+        std::cout << "> ";
+        std::cin >> number_d;
+        if ((number_d == 1 || number_d == 2 || number_d == 3)) {
+            number = (int) number_d;
+            break;
+        }
+        std::cin.clear();
+        std::string line;
+        std::getline(std::cin, line);
+        std::cout << "\nUnfortunately, your input is not 1, 2 or 3. Try again..." << std::endl;
+    }
+
+    Function *function;
+    switch (number) {
+        case 1: {
+            function = new Function_1();
+            break;
+        }
+        case 2: {
+            function = new Function_2();
+            break;
+        }
+        case 3: {
+            function = new Function_3();
+            break;
+        }
+        default:
+            break;
+    }
+
+/*====================================================================================================================*/
+
+    int count_iter;
+    double count_iter_d = 0,
+            fractpart,                   // дробная часть
+            intpart;                     // целая часть;
+
+    std::cout << "\nMaximum number of iterations:\n";
+    while (count_iter_d <= 0 || modf(count_iter_d, &intpart) != 0) {
+        std::cout << "Please , enter a positive integer\n" << "> ";
+        std::cin >> count_iter_d;
+        if (!(count_iter_d <= 0 || modf(count_iter_d, &intpart) != 0)) {
+            count_iter = (int) count_iter_d;
+            break;
+        }
+        std::cin.clear();
+        std::string line;
+        std::getline(std::cin, line);
+        std::cout << "\nUnfortunately, your input is not 1, 2 or 3. Try again..." << std::endl;
+    }
+
+/*====================================================================================================================*/
 
     double epsilon = 0;
     std::cout << "epsilon: " << std::endl;
     std::cin >> epsilon;
     std::cout << std::endl;
 
-    Options options(delta, count_iter, epsilon);
+    Options options(count_iter, epsilon);
 
-    double p;
-    std::cout << "probability p: " << std::endl;
-    std::cin >> p;
-
-    Function_1 function;
-    int dim = function.get_dim();
+    int dim = function->get_dim();
     std::vector<double> res(dim);
     std::cout << "Выберите метод оптимизации" << std::endl;
-    StopCriterion_3 stop;
+    StopCriterion_1 stop;
     int method;
     std::cin >> method;
 
+    Optimization opt;
 
     if (method == 1) {
+        double delta = 0;
+        std::cout << "delta: " << std::endl;
+        std::cin >> delta;
+        std::cout << std::endl;
+
+        double p;
+        std::cout << "probability p: " << std::endl;
+        std::cin >> p;
+
         double point;
 
         std::vector<double> left_bound, right_bound;
@@ -55,9 +117,9 @@ int main() {
 
         Rectangle rectangle(left_bound, right_bound, dim);
 
-        std::vector<double> v;
-        RandomSearch randomSearch(p);
-//        res = randomSearch.optimization(v, function, rectangle, stop, options);
+        rectangle.set_delta(delta);
+
+        res = opt.optimizationRa(function, rectangle, stop, options, p);
     } else {
         std::vector<double> x(dim);
         double t;
@@ -66,8 +128,7 @@ int main() {
             std::cin >> t;
             x[i] = t;
         }
-        NewtonByDirection newtonByDirection(x);
-        res = newtonByDirection.optimization(x, function, stop, options);
+        res = opt.optimizationNe(x, function, stop, options);
     }
     std::cout << "minimum point: ";
     for (int i = 0; i < dim; ++i) {
@@ -76,6 +137,6 @@ int main() {
     }
     std::cout << std::endl;
 
-    std::cout << "value: " << function.get_value(res) << std::endl;
+    std::cout << "value: " << function->get_value(res) << std::endl;
     return 0;
 }

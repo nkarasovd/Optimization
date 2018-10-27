@@ -6,22 +6,14 @@
 
 /*====================================================================================================================*/
 
-Options::Options(double _delta, int _iteration, double _epsilon) {
-    if (_iteration < 1) {
-        throw std::invalid_argument("Error! iterations > 0");
-    }
+Options::Options(int _iteration, double _epsilon) {
     index = 0;
     max_iter = _iteration;
-    delta = _delta;
     epsilon = _epsilon;
 }
 
 int Options::get_max_iter() const {
     return max_iter;
-}
-
-double Options::get_delta() const {
-    return delta;
 }
 
 double Options::get_epsilon() const {
