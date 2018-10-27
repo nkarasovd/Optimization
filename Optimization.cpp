@@ -34,8 +34,7 @@ const double RandomSearch::get_p() {
 }
 
 std::vector<double>
-RandomSearch::optimization(std::vector<double> &point, Function &function, Rectangle &rectangle, Stop &stop,
-                           Options &options) {
+RandomSearch::optimization(Function &function, Rectangle &rectangle, Stop &stop, Options &options) {
     int dim = function.get_dim();
 
     std::vector<double> y_0(dim);
@@ -48,38 +47,29 @@ RandomSearch::optimization(std::vector<double> &point, Function &function, Recta
     int last_iter = 0;
     options.set_last_iter(last_iter);
 
-    double delta = options.get_delta();
+    double delta = rectangle.get_delta();
 
     while (stop.criterion(count_iter, function, options)) {
         ++this->count_iter;
         double q = _dist(_generate);
 
-        if (q < p) {
-            curr_pos = rand_vector(rectangle);
-            if (function.get_value(curr_pos) < function.get_value(y_n)) {
-                last_iter = 0;
-                options.set_last_iter(last_iter);
-                options.set_x_k(curr_pos);
-                y_n = curr_pos;
-
-            } else {
-                ++last_iter;
-                options.set_last_iter(last_iter);
-            }
-        } else {
+        if (q >= p) {
             Rectangle new_rectangle(rectangle.get_left(), rectangle.get_right(), y_n, dim, delta);
             curr_pos = rand_vector(new_rectangle);
-            if (function.get_value(curr_pos) < function.get_value(y_n)) {
-                last_iter = 0;
-                options.set_last_iter(last_iter);
-                options.set_x_k(curr_pos);
-                y_n = curr_pos;
+        } else {
+            curr_pos = rand_vector(rectangle);
+        }
+        if (function.get_value(curr_pos) < function.get_value(y_n)) {
+            last_iter = 0;
+            options.set_last_iter(last_iter);
+            options.set_x_k(curr_pos);
+            y_n = curr_pos;
+            if (q >= p) {
                 delta *= 0.7;
-            } else {
-                ++last_iter;
-                options.set_last_iter(last_iter);
             }
-
+        } else {
+            ++last_iter;
+            options.set_last_iter(last_iter);
         }
     }
     return y_n;
@@ -105,47 +95,59 @@ NewtonByDirection::NewtonByDirection(const std::vector<double> &_x_0) {
 }
 
 std::vector<double>
-NewtonByDirection::optimization(std::vector<double> &point, Function &function, Stop &stop,
-                                Options &options) {
+NewtonByDirection::optimization(std::vector<double> &point, Function &function, Stop &stop, Options &options) {
     int dim = function.get_dim();
     int last_iter = 0;
     options.set_last_iter(last_iter);
 
     VectorXd last_v(dim);
-    VectorXd cur_v(dim);
 
+    VectorXd cur_v(dim);
     std::vector<double> p_cur(dim);
-    for (int i = 0; i < dim; ++i) {
-        last_v(i) = point[i];
-    }
+
+    last_v = copy(last_v, point);
 
     while (stop.criterion(count_iter, function, options)) {
         ++this->count_iter;
         cur_v = last_v - function.Hessian(last_v).colPivHouseholderQr().solve(function.Gradient(last_v));
 
-        for (int i = 0; i < dim; ++i) {
-            point[i] = last_v(i);
-        }
-        for (int i = 0; i < dim; ++i) {
-            p_cur[i] = cur_v(i);
-        }
+        point = copy(point, last_v);
+
+
+        p_cur = copy(p_cur, cur_v);
+
         if (function.get_value(p_cur) < function.get_value(point)) {
-            std::cout << "aaa" << std::endl;
+
             options.set_x_k(p_cur);
             last_iter = 0;
             options.set_last_iter(last_iter);
         } else {
+            std::cout << " asasasas" << std::endl;
             ++last_iter;
             options.set_last_iter(last_iter);
         }
         last_v = cur_v;
     }
-    for (int i = 0; i < dim; ++i) {
-        point[i] = last_v(i);
-    }
+    point = copy(point, last_v);
+
     return point;
 }
 
 const char *NewtonByDirection::get_name() {
     return "Newton by direction --- number 2";
+}
+
+std::vector<double> NewtonByDirection::copy(std::vector<double> &v, VectorXd &x) {
+
+    for (int i = 0; i < x.size(); ++i) {
+        v[i] = x(i);
+    }
+    return v;
+}
+
+VectorXd NewtonByDirection::copy(VectorXd &x, std::vector<double> &v) {
+    for (int i = 0; i < x.size(); ++i) {
+        x(i) = v[i];
+    }
+    return x;
 }

@@ -64,8 +64,7 @@ public:
     const double get_p();
 
     std::vector<double>
-    optimization(std::vector<double> &point, Function &function, Rectangle &rectangle, Stop &stop,
-                 Options &options);
+    optimization(Function &function, Rectangle &rectangle, Stop &stop, Options &options);
 
 };
 
@@ -77,15 +76,18 @@ public:
  */
 class NewtonByDirection : public Optimization {
 private:
-    std::vector<double> x_0;
+    std::vector<double> x_0; // Начало поиска
 public:
     NewtonByDirection(const std::vector<double> &_x_0);
 
     std::vector<double>
-    optimization(std::vector<double> &point, Function &function, Stop &stop,
-                 Options &options);
+    optimization(std::vector<double> &point, Function &function, Stop &stop, Options &options);
 
     const char *get_name() override;
+
+    std::vector<double> copy(std::vector<double> &v, VectorXd &x);
+
+    VectorXd copy(VectorXd &x, std::vector<double> &v);
 };
 
 /*====================================================================================================================*/
