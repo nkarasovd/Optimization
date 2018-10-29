@@ -82,7 +82,10 @@ public:
  * TODO: придумать и все реализовать
  */
 class Function_2 : public Function {
+public:
     const char *get_name() override;
+
+    Function_2();
 
     const double get_value(std::vector<double> &x) override;
 

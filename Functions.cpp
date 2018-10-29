@@ -48,20 +48,30 @@ const char *Function_2::get_name() {
     return "Function_2";
 }
 
+Function_2::Function_2() {
+    dim = 3;
+}
+
 const double Function_2::get_value(std::vector<double> &x) {
-    return 0;
+    return x[0] * x[0] + x[1] * x[1] + x[2] * x[2];
 }
 
 const int Function_2::get_dim() {
-    return 0;
+    return dim;
 }
 
 const VectorXd Function_2::Gradient(VectorXd &x) {
-    return Eigen::VectorXd();
+    VectorXd gradient(dim);
+    gradient << 2 * x(0), 2 * x(1), 2 * x(2);
+    return gradient;
 }
 
 const MatrixXd Function_2::Hessian(VectorXd &x) {
-    return Eigen::MatrixXd();
+    MatrixXd hessian(dim, dim);
+    hessian << 2, 0, 0,
+               0, 2, 0,
+               0, 0, 2;
+    return hessian;
 }
 
 /*====================================================================================================================*/

@@ -13,7 +13,7 @@ int main() {
 
     std::cout << "\nChoose your function:\n"
               << "< 1 > (1 - x)^2 + 100 * (y - x^2)^2\n"
-              << "< 2 > \n"
+              << "< 2 > x^2 + y^2 + z^2\n"
               << "< 3 > \n" << std::endl;
 
     int number;
