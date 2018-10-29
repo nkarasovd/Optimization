@@ -22,7 +22,7 @@ public:
      * False == останавливаемся.
      */
     virtual bool
-    criterion(int count_iter, Function *function, Options &options) = 0;
+    criterion(int count_iter, Function *function, Options *options) = 0;
 
     /*
      * Функция вернет имя критерия остановки.
@@ -40,7 +40,7 @@ public:
  * то сразу заканчиваем поиск.
  */
 class StopCriterion_1 : public Stop {
-    bool criterion(int count_iter, Function *function, Options &options) override;
+    bool criterion(int count_iter, Function *function, Options *options) override;
 
     const char *get_name() override;
 };
@@ -56,7 +56,7 @@ class StopCriterion_1 : public Stop {
  * то сразу заканчиваем поиск.
  */
 class StopCriterion_2 : public Stop {
-    bool criterion(int count_iter, Function *function, Options &options) override;
+    bool criterion(int count_iter, Function *function, Options *options) override;
 
     const char *get_name() override;
 };
@@ -73,7 +73,7 @@ class StopCriterion_2 : public Stop {
  * то сразу заканчиваем поиск.
  */
 class StopCriterion_3 : public Stop {
-    bool criterion(int count_iter, Function *function, Options &options) override;
+    bool criterion(int count_iter, Function *function, Options *options) override;
 
     const char *get_name() override;
 };

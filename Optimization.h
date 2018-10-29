@@ -26,12 +26,12 @@ protected:
 public:
     Optimization();
     std::vector<double>
-    optimizationRa(Function *function, Rectangle &rectangle, Stop &stop, Options &options, double p);
+    optimizationRa(Function *function, Rectangle &rectangle, Stop *stop, Options *options, double p);
 
     std::vector<double> rand_vector(Rectangle &area);
 
     std::vector<double>
-    optimizationNe(std::vector<double> &point, Function *function, Stop &stop, Options &options);
+    optimizationNe(std::vector<double> &point, Function *function, Stop *stop, Options *options);
 
 
     std::vector<double> copy(std::vector<double> &v, VectorXd &x);

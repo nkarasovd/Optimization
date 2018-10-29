@@ -28,7 +28,9 @@ class Options {
     std::vector<double> x_k_Plus_j; // Точка улучшения x_{k+j}
     double epsilon; // |f(x_{k+j}) - f(x_{k})| < epsilon
 public:
-    Options(int _iteration, double _epsilon);
+    Options(int _iteration);
+
+    Options(double _epsilon);
 
     int get_max_iter() const;
 
@@ -40,7 +42,7 @@ public:
 
     void set_x_k(std::vector<double> &_v);
 
-    std::vector<double> & get_x_k();
+    std::vector<double> &get_x_k();
 
     std::vector<double> &get_x_k_Plus_j();
 

@@ -22,7 +22,7 @@ Optimization::Optimization() {
 
 
 std::vector<double>
-Optimization::optimizationRa(Function *function, Rectangle &rectangle, Stop &stop, Options &options, double p) {
+Optimization::optimizationRa(Function *function, Rectangle &rectangle, Stop *stop, Options *options, double p) {
     int dim = function->get_dim();
 
     std::vector<double> y_0(dim);
@@ -33,11 +33,11 @@ Optimization::optimizationRa(Function *function, Rectangle &rectangle, Stop &sto
     std::vector<double> curr_pos(dim);
 
     int last_iter = 0;
-    options.set_last_iter(last_iter);
+    options->set_last_iter(last_iter);
 
     double delta = rectangle.get_delta();
 
-    while (stop.criterion(count_iter, function, options)) {
+    while (stop->criterion(count_iter, function, options)) {
         ++this->count_iter;
         double q = _dist(_generate);
 
@@ -49,15 +49,15 @@ Optimization::optimizationRa(Function *function, Rectangle &rectangle, Stop &sto
         }
         if (function->get_value(curr_pos) < function->get_value(y_n)) {
             last_iter = 0;
-            options.set_last_iter(last_iter);
-            options.set_x_k(curr_pos);
+            options->set_last_iter(last_iter);
+            options->set_x_k(curr_pos);
             y_n = curr_pos;
             if (q >= p) {
                 delta *= 0.7;
             }
         } else {
             ++last_iter;
-            options.set_last_iter(last_iter);
+            options->set_last_iter(last_iter);
         }
     }
     return y_n;
@@ -77,10 +77,10 @@ std::vector<double> Optimization::rand_vector(Rectangle &rectangle) {
 /*====================================================================================================================*/
 
 std::vector<double>
-Optimization::optimizationNe(std::vector<double> &point, Function *function, Stop &stop, Options &options) {
+Optimization::optimizationNe(std::vector<double> &point, Function *function, Stop *stop, Options *options) {
     int dim = function->get_dim();
     int last_iter = 0;
-    options.set_last_iter(last_iter);
+    options->set_last_iter(last_iter);
 
     VectorXd last_v(dim);
 
@@ -89,7 +89,7 @@ Optimization::optimizationNe(std::vector<double> &point, Function *function, Sto
 
     last_v = copy(last_v, point);
 
-    while (stop.criterion(count_iter, function, options)) {
+    while (stop->criterion(count_iter, function, options)) {
         ++this->count_iter;
         cur_v = last_v - function->Hessian(last_v).colPivHouseholderQr().solve(function->Gradient(last_v));
 
@@ -98,14 +98,14 @@ Optimization::optimizationNe(std::vector<double> &point, Function *function, Sto
 
         p_cur = copy(p_cur, cur_v);
 
-        if (function->get_value(p_cur) < function->get_value(point)) {
+        if (function->get_value(p_cur) <= function->get_value(point)) {
 
-            options.set_x_k(p_cur);
+            options->set_x_k(p_cur);
             last_iter = 0;
-            options.set_last_iter(last_iter);
+            options->set_last_iter(last_iter);
         } else {
             ++last_iter;
-            options.set_last_iter(last_iter);
+            options->set_last_iter(last_iter);
         }
         last_v = cur_v;
     }

@@ -6,9 +6,13 @@
 
 /*====================================================================================================================*/
 
-Options::Options(int _iteration, double _epsilon) {
+Options::Options(int _iteration) {
     index = 0;
     max_iter = _iteration;
+}
+
+Options::Options(double _epsilon) {
+    index = 0;
     epsilon = _epsilon;
 }
 
