@@ -60,4 +60,13 @@ void Rectangle::set_delta(double delta) {
     Rectangle::delta = delta;
 }
 
+bool const Rectangle::is_in(VectorXd &V) {
+    for (int i = 0; i < dim; ++i) {
+        if (!(left_border[i] <= V(i) && V(i) <= right_border[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
 /*====================================================================================================================*/

@@ -6,6 +6,9 @@
 #define OPTIMIZATION_AREA_H
 
 #include <vector>
+#include "eigen-git-mirror/Eigen/Dense"
+
+using namespace Eigen;
 
 /*====================================================================================================================*/
 /**
@@ -73,6 +76,11 @@ public:
     std::vector<double> &get_left();
 
     std::vector<double> &get_right();
+
+    /*
+     * Проверка: принадлжеит ли точка области.
+     */
+    bool const is_in(VectorXd &V);
 };
 
 /*====================================================================================================================*/
