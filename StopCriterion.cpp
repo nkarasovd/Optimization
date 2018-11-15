@@ -19,6 +19,10 @@ const char *StopCriterion_1::get_name() {
 
 /*====================================================================================================================*/
 
+/*
+ * Все ниже для второго критерия.
+ */
+
 bool StopCriterion_2::criterion(int count_iter, Function *function, Options *options) {
     return options->get_last_iter() < options->get_max_iter();
 }
@@ -28,6 +32,10 @@ const char *StopCriterion_2::get_name() {
 }
 
 /*====================================================================================================================*/
+
+/*
+ * Все ниже для третьего критерия.
+ */
 
 bool StopCriterion_3::criterion(int count_iter, Function *function, Options *options) {
     if (options->get_x_k().empty() || options->get_x_k_Plus_j().empty()) return true;
