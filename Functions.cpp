@@ -45,7 +45,7 @@ const MatrixXd Function_1::Hessian(VectorXd &x) {
  */
 
 const char *Function_2::get_name() {
-    return "Function_2";
+    return "f(x, y, z) = x^2 + y^2 + z^2";
 }
 
 Function_2::Function_2() {
@@ -69,8 +69,8 @@ const VectorXd Function_2::Gradient(VectorXd &x) {
 const MatrixXd Function_2::Hessian(VectorXd &x) {
     MatrixXd hessian(dim, dim);
     hessian << 2, 0, 0,
-               0, 2, 0,
-               0, 0, 2;
+            0, 2, 0,
+            0, 0, 2;
     return hessian;
 }
 
@@ -81,23 +81,32 @@ const MatrixXd Function_2::Hessian(VectorXd &x) {
  */
 
 const char *Function_3::get_name() {
-    return "Function_3";
+    return "f(x, y) = 5 * x^2 - 6 * x * y + 5 * y^2";
+}
+
+Function_3::Function_3() {
+    dim = 2;
 }
 
 const double Function_3::get_value(std::vector<double> &x) {
-    return 0;
+    return 5 * x[0] * x[0] - 6 * x[0] * x[1] + 5 * x[1] * x[1];
 }
 
 const int Function_3::get_dim() {
-    return 0;
+    return 2;
 }
 
 const VectorXd Function_3::Gradient(VectorXd &x) {
-    return Eigen::VectorXd();
+    VectorXd gradient(dim);
+    gradient << 10 * x(0) - 6 * x(1), -6 * x(0) + 10 * x(1);
+    return gradient;
 }
 
 const MatrixXd Function_3::Hessian(VectorXd &x) {
-    return Eigen::MatrixXd();
+    MatrixXd hessian(dim, dim);
+    hessian << 10, -6,
+            -6, 10;
+    return hessian;
 }
 
 /*====================================================================================================================*/
