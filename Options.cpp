@@ -51,4 +51,12 @@ std::vector<double> &Options::get_x_k_Plus_j() {
     return x_k_Plus_j;
 }
 
+int Options::getMax_iter_after() const {
+    return max_iter_after;
+}
+
+void Options::setMax_iter_after(int max_iter_after) {
+    Options::max_iter_after = max_iter_after;
+}
+
 /*====================================================================================================================*/

@@ -21,24 +21,29 @@
  */
 class Optimization {
 protected:
-    int count_iter = 0; // Number of iterations performed
+    int count_iter = 0;
+public:
+    int getCount_iter() const;
+
+protected:
+    // Number of iterations performed
 
     std::mt19937 _generate;
     std::uniform_real_distribution<> _dist;
 public:
     Optimization();
-    /*
+    /**
      * Функция случайного поиска.
      */
     std::vector<double>
     optimizationRandomSearch(Function *function, Rectangle &rectangle, Stop *stop, Options *options, double p);
 
-    /*
+    /**
      * Функция возвращает случайную точку из области.
      */
     std::vector<double> rand_vector(Rectangle &area);
 
-    /*
+    /**
      * Метод Ньютона по направлению.
      */
     std::vector<double>

@@ -91,7 +91,31 @@ int main() {
     Options *options;
     Stop *stop;
     switch (stop_cr) {
-        case 1:
+        case 1: {
+            std::cout << "\nEnter maximum number of iterations:\n";
+
+            while (count_iter_d <= 0 || modf(count_iter_d, &intpart) != 0) {
+                while (std::cout << "Please, enter a positive integer\n> "
+                       && !(std::cin >> count_iter_d)) {
+
+                    std::cin.clear();
+                    std::string line;
+                    std::getline(std::cin, line);
+                    std::cout << "\nI am sorry, but "
+                              << "your input is not a number... \n" << std::endl;
+                }
+                if (count_iter_d <= 0 || modf(count_iter_d, &intpart) != 0) {
+                    std::cout << "\nUnfortunately, your input is not a positive integer. Try again...\n"
+                              << std::endl;
+                } else {
+                    count_iter = (int) count_iter_d;
+                }
+            }
+
+            options = new Options(count_iter);
+            stop = new StopCriterion_1();
+            break;
+        }
         case 2: {
             std::cout << "\nEnter maximum number of iterations:\n";
 
@@ -114,6 +138,28 @@ int main() {
             }
 
             options = new Options(count_iter);
+
+            std::cout << "\nEnter maximum number of iterations after last improvement:\n";
+            count_iter_d = 0;
+            while (count_iter_d <= 0 || modf(count_iter_d, &intpart) != 0) {
+                while (std::cout << "Please, enter a positive integer\n> "
+                       && !(std::cin >> count_iter_d)) {
+
+                    std::cin.clear();
+                    std::string line;
+                    std::getline(std::cin, line);
+                    std::cout << "\nI am sorry, but "
+                              << "your input is not a number... \n" << std::endl;
+                }
+                if (count_iter_d <= 0 || modf(count_iter_d, &intpart) != 0) {
+                    std::cout << "\nUnfortunately, your input is not a positive integer. Try again...\n"
+                              << std::endl;
+                } else {
+                    count_iter = (int) count_iter_d;
+                }
+            }
+
+            options->setMax_iter_after(count_iter);
             stop = new StopCriterion_2();
             break;
         }
@@ -281,6 +327,8 @@ int main() {
     std::cout << std::endl;
 
     std::cout << "Value: " << function->get_value(res) << std::endl;
+
+    std::cout << "Iterations " << opt.getCount_iter() << std::endl;
 
     std::cout << "Goodbye!" << std::endl;
     return 0;

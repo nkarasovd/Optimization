@@ -16,7 +16,7 @@
  */
 class Stop {
 public:
-    /*
+    /**
      * Функция возвращает либо True, либо False.
      * True == продолжаем поиск.
      * False == останавливаемся.
@@ -24,7 +24,7 @@ public:
     virtual bool
     criterion(int count_iter, Function *function, Options *options) = 0;
 
-    /*
+    /**
      * Функция вернет имя критерия остановки.
      */
     virtual const char *get_name() = 0;

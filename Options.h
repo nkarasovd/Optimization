@@ -15,9 +15,17 @@
  * и сразу, а просто передать коробку со всем добром.
  */
 class Options {
-    int max_iter; // Максимальное число итераций
+    int max_iter = 10000; // Максимальное число итераций
+    int max_iter_after;
 
-    /*
+public:
+    void setMax_iter_after(int max_iter_after);
+
+public:
+    int getMax_iter_after() const;
+
+private:
+    /**
      * Число итераций, прошедших с последнего улучшения.
      * Будем сравнивать с max_iter
      */

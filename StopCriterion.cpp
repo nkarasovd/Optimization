@@ -24,7 +24,7 @@ const char *StopCriterion_1::get_name() {
  */
 
 bool StopCriterion_2::criterion(int count_iter, Function *function, Options *options) {
-    return options->get_last_iter() < options->get_max_iter();
+    return (options->get_last_iter() < options->getMax_iter_after() && options->get_max_iter() > count_iter);
 }
 
 const char *StopCriterion_2::get_name() {
@@ -42,7 +42,7 @@ bool StopCriterion_3::criterion(int count_iter, Function *function, Options *opt
 
     double value = fabs(function->get_value(options->get_x_k_Plus_j()) - function->get_value(options->get_x_k()));
 
-    return value > options->get_epsilon();
+    return (value > options->get_epsilon() && count_iter < options->get_max_iter());
 
 }
 

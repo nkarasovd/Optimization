@@ -21,17 +21,17 @@ class Function {
 protected:
     int dim; // Размерность функции.
 public:
-    /*
+    /**
      * Возвращает имя (аналитический вид) функции.
      */
     virtual const char *get_name() = 0;
 
-    /*
+    /**
      * Возвращает значение в точке.
      */
     virtual const double get_value(std::vector<double> &x) = 0;
 
-    /*
+    /**
      *Возвращает размерность функции.
      */
     virtual const int get_dim() = 0;
@@ -54,18 +54,18 @@ class Function_1 : public Function {
 public:
     Function_1();
 
-    /*
+    /**
      * Вернет свой аналитический вид:
      * f(x_{1}, x_{2}) = (1 - x)^{2} + 100 * (y - x^{2})^{2}.
      */
     const char *get_name() override;
 
-    /*
+    /**
      * Возвращает значение в точке (x_{1}, x_{2}).
      */
     const double get_value(std::vector<double> &x) override;
 
-    /*
+    /**
      * Возвращает значение 2.
      */
     const int get_dim() override;
