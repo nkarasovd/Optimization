@@ -103,6 +103,10 @@ Optimization::optimizationNewton(std::vector<double> &point, Function *function,
             cur_v = last_v - dir;
         }
 
+        point = copy(point, last_v);
+
+        p_cur = copy(p_cur, cur_v);
+
         while (function->get_value(p_cur) > function->get_value(point)) {
             dir = dir / 2;
             cur_v = last_v - dir;
