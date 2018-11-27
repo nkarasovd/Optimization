@@ -84,7 +84,6 @@ Optimization::optimizationNewton(std::vector<double> &point, Function *function,
     options->set_last_iter(last_iter);
 
     VectorXd last_v(dim);
-
     VectorXd cur_v(dim);
     VectorXd dir(dim);
     std::vector<double> p_cur(dim);
@@ -92,24 +91,35 @@ Optimization::optimizationNewton(std::vector<double> &point, Function *function,
     last_v = copy(last_v, point);
 
     while (stop->criterion(count_iter, function, options)) {
+
         ++this->count_iter;
+
         dir = function->Hessian(last_v).colPivHouseholderQr().solve(function->Gradient(last_v));
         cur_v = last_v - dir;
+
 
         while (!(rectangle.is_in(cur_v))) {
             dir = dir / 2;
             cur_v = last_v - dir;
         }
 
+        while (function->get_value(p_cur) > function->get_value(point)) {
+            dir = dir / 2;
+            cur_v = last_v - dir;
+            point = copy(point, last_v);
+
+            p_cur = copy(p_cur, cur_v);
+        }
+
         point = copy(point, last_v);
 
         p_cur = copy(p_cur, cur_v);
 
-        if (function->get_value(p_cur) <= function->get_value(point)) {
+        if (function->get_value(p_cur) < function->get_value(point)) {
             options->set_x_k(p_cur);
-            ++last_iter;
-        } else {
             last_iter = 0;
+        } else {
+            ++last_iter;
         }
         options->set_last_iter(last_iter);
         last_v = cur_v;
@@ -132,4 +142,8 @@ VectorXd Optimization::copy(VectorXd &x, std::vector<double> &v) {
         x(i) = v[i];
     }
     return x;
+}
+
+int Optimization::getCount_iter() const {
+    return count_iter;
 }
